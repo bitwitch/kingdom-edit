@@ -12,8 +12,9 @@ pikeman_template = { "name": "Pikeman P1 [8]", "parentObject": { "linkedObjectID
 
 enemy_kinds = [ "GreedArcher", "GreedKnight", "CrownStealer", "Troll", "Squid", "Boss" ]
 
+campaign_index = 0
 max_castle_level = 6
-max_wall_level = 4
+max_wall_level = 5
 
 _next_net_id = 3000
 def next_net_id():
@@ -181,7 +182,7 @@ def parse_json_file(filepath):
 # for use in python interpreter for easily playing around
 def get_island_data(filepath, island):
     doc = parse_json_file(filepath)
-    campaign_index = 0
+    global campaign_index
     return doc["campaigns"][campaign_index]["_islands"][island]
 
 
@@ -201,7 +202,7 @@ def print_objs_between(objects, a, b):
 
 # remove all non trigger portals, move to trigger portal with archer, worker, and idol
 def action_take_over(doc, island):
-    campaign_index = 0
+    global campaign_index
     campaign = doc["campaigns"][campaign_index]
     land = campaign["_islands"][island]
     objects = land["objects"]
@@ -253,7 +254,7 @@ def action_take_over(doc, island):
 
 # destroy all portals
 def action_destroy(doc, island):
-    campaign_index = 0
+    global campaign_index
     campaign = doc["campaigns"][campaign_index]
     land = campaign["_islands"][island]
     objects = land["objects"]
@@ -275,7 +276,7 @@ def action_destroy(doc, island):
 
 # kill all enemies
 def action_exterminate(doc, island):
-    campaign_index = 0
+    global campaign_index
     campaign = doc["campaigns"][campaign_index]
     land = campaign["_islands"][island]
     objects = land["objects"]
@@ -305,7 +306,7 @@ def action_exterminate(doc, island):
 
 # teleport to a position with a squad for battle
 def action_formation(doc, island, x):
-    campaign_index = 0
+    global campaign_index
     campaign = doc["campaigns"][campaign_index]
     land = campaign["_islands"][island]
     objects = land["objects"]
@@ -328,9 +329,9 @@ def action_formation(doc, island, x):
     print(f"save file written to {outfile}")
 
 
-# upgrade land's castle to max
+# upgrade land to maximum pimpage level
 def action_pimp(doc, island):
-    campaign_index = 0
+    global campaign_index
     campaign = doc["campaigns"][campaign_index]
     land = campaign["_islands"][island]
     objects = land["objects"]
@@ -352,11 +353,11 @@ def action_pimp(doc, island):
     print(f"castle upgraded to level {max_castle_level}")
 
     # upgrade walls
-    global max_wall_level
-    upgrade_walls(objects, max_wall_level)
+    # global max_wall_level
+    # upgrade_walls(objects, max_wall_level)
 
     # mark all trees for removal
-    mark_trees(objects)
+    # mark_trees(objects)
 
     # spawn some bros
     spawn_count = 10
@@ -377,7 +378,7 @@ def action_pimp(doc, island):
 
 
 def action_spawn(doc, island, num_archers, num_workers, num_pikemen):
-    campaign_index = 0
+    global campaign_index
     campaign = doc["campaigns"][campaign_index]
     land = campaign["_islands"][island]
     objects = land["objects"]
@@ -420,23 +421,25 @@ if __name__ == "__main__":
     # probe()
     # sys.exit(0)
 
-    action_list = {
-        "take_over":   "destroy all non trigger portals, move to trigger portal with archer, worker, and idol",
-        "destroy":     "destroy all portals",
-        "exterminate": "kill all enemies",
-        "formation":   "teleport to a position with a squad for battle",
-        "spawn":       "spawn characters like archers or workers",
-        "pimp":        "upgrade land's castle to max" }
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument("action", choices=action_list, help="\n".join([f"{action:12} {help_msg}" for action, help_msg in action_list.items()]))
-    parser.add_argument("save_file", help="path to a save file in json format")
-    parser.add_argument("island", help="which island to affect (number)", type=int)
+    parser = argparse.ArgumentParser()
 
-    parser.add_argument("-a", "--archers", type=int, default=0, help="how many archers to spawn")
-    parser.add_argument("-w", "--workers", type=int, default=0, help="how many workers to spawn")
-    parser.add_argument("-p", "--pikemen", type=int, default=0, help="how many pikemen to spawn")
-    # parser.add_argument("-k", "--knights", type=int, default=0, help="how many knights to spawn")
-    parser.add_argument("-x", "--position", type=int, help="x position")
+    parser.add_argument("save_file", help="path to a save file in json format")
+    parser.add_argument("-i", "--island", type=int, help="which island to affect")
+
+    subparsers = parser.add_subparsers(dest="action", help="subcommand help")
+    subparsers.add_parser("take_over",   help="destroy all non trigger portals, move to trigger portal with archer, worker, and idol")
+    subparsers.add_parser("destroy",     help="destroy all portals")
+    subparsers.add_parser("exterminate", help="kill all enemies")
+    subparsers.add_parser("pimp",        help="upgrade land's castle to max")
+
+    formation_parser = subparsers.add_parser("formation", help="teleport to a position with a squad for battle")
+    formation_parser.add_argument("-x", "--position", type=int, help="x position")
+
+    spawn_parser = subparsers.add_parser("spawn", help="spawn characters like archers or workers")
+    spawn_parser.add_argument("-a", "--archers", type=int, default=0, help="how many archers to spawn")
+    spawn_parser.add_argument("-w", "--workers", type=int, default=0, help="how many workers to spawn")
+    spawn_parser.add_argument("-p", "--pikemen", type=int, default=0, help="how many pikemen to spawn")
+    # spawn_parser.add_argument("-k", "--knights", type=int, default=0, help="how many knights to spawn")
 
     args = parser.parse_args()
 
