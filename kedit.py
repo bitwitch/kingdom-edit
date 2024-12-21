@@ -353,11 +353,11 @@ def action_pimp(doc, island):
     print(f"castle upgraded to level {max_castle_level}")
 
     # upgrade walls
-    # global max_wall_level
-    # upgrade_walls(objects, max_wall_level)
+    global max_wall_level
+    upgrade_walls(objects, max_wall_level)
 
     # mark all trees for removal
-    # mark_trees(objects)
+    mark_trees(objects)
 
     # spawn some bros
     spawn_count = 10
@@ -374,7 +374,6 @@ def action_pimp(doc, island):
     with open(outfile, "w") as f:
         json.dump(doc, f)
     print(f"save file written to {outfile}")
-
 
 
 def action_spawn(doc, island, num_archers, num_workers, num_pikemen):
@@ -411,6 +410,49 @@ def action_spawn(doc, island, num_archers, num_workers, num_pikemen):
         json.dump(doc, f)
     print(f"save file written to {outfile}")
 
+# mark all trees for removal
+def action_trees(doc, island):
+    global campaign_index
+    campaign = doc["campaigns"][campaign_index]
+    land = campaign["_islands"][island]
+    objects = land["objects"]
+
+    print("marking trees for removal")
+    mark_trees(objects)
+
+    player1 = obj_by_name(objects, "Player 1")
+    obj_set_coins(player1, 69)
+
+
+    outfile = f"trees_{island}.json"
+    with open(outfile, "w") as f:
+        json.dump(doc, f)
+    print(f"save file written to {outfile}")
+
+def action_goto(doc, island):
+    global campaign_index
+    campaign = doc["campaigns"][campaign_index]
+
+    campaign["PreviousLand"] = campaign["currentLand"]
+    campaign["currentLand"] = island
+
+    reign = campaign["currentReign"]
+    reign["currentLand"] = island
+
+    carry = campaign["carryForward"]
+    carry["present"]             = True
+    carry["usesCurrencySystem"]   = True
+    carry["currencyP1"]["Coins"] = 69
+    carry["currencyP1"]["Gems"]  = 3
+    carry["currencyP1"]["Crown"] = 1
+    carry["numPikeman"]          = 4
+    carry["numFarmers"]          = 4
+    carry["numFleetBoats"]       = 4
+
+    outfile = f"goto_{island}.json"
+    with open(outfile, "w") as f:
+        json.dump(doc, f)
+    print(f"save file written to {outfile}")
 
 
 def probe():
@@ -427,10 +469,12 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--island", type=int, help="which island to affect")
 
     subparsers = parser.add_subparsers(dest="action", help="subcommand help")
+    subparsers.add_parser("goto",        help="goto island -i, with money and crew")
     subparsers.add_parser("take_over",   help="destroy all non trigger portals, move to trigger portal with archer, worker, and idol")
     subparsers.add_parser("destroy",     help="destroy all portals")
     subparsers.add_parser("exterminate", help="kill all enemies")
     subparsers.add_parser("pimp",        help="upgrade land's castle to max")
+    subparsers.add_parser("trees",       help="mark all trees for removal")
 
     formation_parser = subparsers.add_parser("formation", help="teleport to a position with a squad for battle")
     formation_parser.add_argument("-x", "--position", type=int, help="x position")
@@ -445,7 +489,9 @@ if __name__ == "__main__":
 
     doc = parse_json_file(args.save_file)
 
-    if args.action == "take_over":
+    if args.action == "goto":
+        action_goto(doc, args.island)
+    elif args.action == "take_over":
         action_take_over(doc, args.island)
     elif args.action == "destroy":
         action_destroy(doc, args.island)
@@ -461,4 +507,6 @@ if __name__ == "__main__":
         action_spawn(doc, args.island, args.archers, args.workers, args.pikemen)
     elif args.action == "pimp":
         action_pimp(doc, args.island)
+    elif args.action == "trees":
+        action_trees(doc, args.island)
     
