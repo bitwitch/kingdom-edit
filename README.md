@@ -7,9 +7,9 @@ As of December 2024, the game has some issues on Nintendo Switch and can corrupt
 **Warning: This is quick and dirty code that I wrote to solve my problem. I don't have time nor energy to make it a nice polished thing that is easy to use, but I am still releasing it just in case it can help someone anyway.**  
 
 ### Usage
-```
-$ python kedit.py save_file -i island_number action 
+`$ python kedit.py save_file -i island_number action `  
 
+```
 save_file
 path to save a file in json format
 
