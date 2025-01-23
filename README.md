@@ -52,7 +52,7 @@ This action is meant for the first four small islands that have an idol and monu
 	`generate_json.bat save.json`
 4. Execute kedit with the take_over action 
 	`python kedit.py save.json -i 1 take_over`  
-5. Gzip the newly generated save file
+5. Gzip the newly generated save file (this saves the file as "global-v35", that is what the game will search for)
 	`generate_save.bat take_over_1.json`
 6. Run the game, you should spawn at the "trigger portal" along with an archer, a worker, the idol, and some coins
 7. The archer should kill the portal in one shot as the hp has been lowered
@@ -60,4 +60,23 @@ This action is meant for the first four small islands that have an idol and monu
 9. Wait for worker to build it
 10. Grab the idol and move it over to the monument
 
+### Upgrade the castle on an island to max (aka pimp my island)
+1. Must visit that island at least once to populate the island data in the save file, assume for this example we are choosing island 1
+2. Navigate to the directory where the game save file is located (e.g. C:\Users\shmow\AppData\LocalLow\noio\KingdomTwoCrowns\Release)
+3. Decompress the save file into json
+	`generate_json.bat save.json`
+4. Execute kedit with the pimp action 
+	`python kedit.py save.json -i 1 pimp`  
+5. Gzip the newly generated save file (this saves the file as "global-v35", that is what the game will search for)
+	`generate_save.bat pimp_1.json`
+6. Run the game, you should spawn at the center of the island in front of the castle with a bunch of coins. The castle will be one less than the max level so you must manually pay to upgrade one more time. 
+    - This is because the castle can be positioned strangely if it is upgraded directly to max and manually doing the final upgrade eliminates that problem.
 
+### Transfer a save file from PC to Nintendo Switch
+You can use PlayFab, the cloud save feature in Kingdom, to sync up the save file on your computer to your Nintendo Switch.  
+1. Open the game on PC with the save file that you crafted
+2. In the main menu, click the Account button
+3. Create an account to start syncing your save to PlayFab
+4. Exit the game on computer
+5. Open the game on Switch
+6. Sign in to your PlayFab account and then your save should be synced
