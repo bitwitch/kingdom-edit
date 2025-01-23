@@ -43,9 +43,9 @@ spawn                  spawn characters like archers or workers
 ```
 
 ## How To
-[Take over and island](#take-over-an-island)
-[Upgrade the castle on an island to max](#upgrade-the-castle-on-an-island-to-max-aka-pimp-my-island)
-[Transfer a save file from PC to Nintendo Switch](#transfer-a-save-file-from-PC-to-nintendo-switch)
+- [Take over and island](#take-over-an-island)
+- [Upgrade the castle on an island to max](#upgrade-the-castle-on-an-island-to-max-aka-pimp-my-island)
+- [Transfer a save file from PC to Nintendo Switch](#transfer-a-save-file-from-PC-to-nintendo-switch)
 
 ### Take over an island
 This action is meant for the first four small islands that have an idol and monument.  
