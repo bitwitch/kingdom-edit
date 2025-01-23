@@ -1,10 +1,10 @@
+**Warning: This is quick and dirty code that I wrote to solve my problem. I don't have time nor energy to make it a nice polished thing that is easy to use, but I am still releasing it just in case it can help someone anyway.**  
+
 # Kingdom Edit
 A save file editor for Kingdom New Crowns: Call of Olympus.   
 
 **Why?**  
 As of December 2024, the game has some issues on Nintendo Switch and can corrupt your save file causing the game to be unplayable. My partner and I love this game and played it for many many hours, so when it broke I had to find a way to fix it so we could keep playing. I discovered that the save file format is just a json file that has been gzipped, so I hacked away at it to get us back to where we were when the game broke.  
-
-**Warning: This is quick and dirty code that I wrote to solve my problem. I don't have time nor energy to make it a nice polished thing that is easy to use, but I am still releasing it just in case it can help someone anyway.**  
 
 ### Usage
 ```
